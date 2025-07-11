@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Continuous Alert</title>
+    <title>Continuous Alert with Jumpscare</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -13,6 +13,7 @@
             height: 100vh;
             margin: 0;
             background-color: #f0f0f0;
+            transition: background-color 0.5s;
         }
         .container {
             text-align: center;
@@ -33,6 +34,23 @@
         button:hover {
             background-color: #ff6b81;
         }
+        .jumpscare {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: black;
+            z-index: 9999;
+            justify-content: center;
+            align-items: center;
+        }
+        .jumpscare img {
+            width: 100%;  
+            height: 100%; 
+            object-fit: cover; 
+        }
     </style>
 </head>
 <body>
@@ -42,21 +60,40 @@
         <button id="toggleBtn">Mulai</button>
     </div>
 
+    <div class="jumpscare" id="jumpscare">
+        <img src="https://files.catbox.moe/57ymdr.jpeg" alt="Jumpscare Image">
+    </div>
+
+    <audio id="jumpscareAudio" preload="auto" loop>
+        <source src="https://files.catbox.moe/ra1ziz.mp3" type="audio/mpeg">
+        Your browser does not support the audio element.
+    </audio>
+
     <script>
         let alertInterval;
         const toggleBtn = document.getElementById('toggleBtn');
+        const jumpscareDiv = document.getElementById('jumpscare');
+        const jumpscareAudio = document.getElementById('jumpscareAudio');
         let isAlerting = false;
 
         function toggleAlert() {
             if (isAlerting) {
                 clearInterval(alertInterval);
+                document.body.style.backgroundColor = '#f0f0f0'; 
+                toggleBtn.style.display = 'block'; 
                 toggleBtn.textContent = 'Mulai';
+                jumpscareDiv.style.display = 'none'; 
+                jumpscareAudio.pause(); 
+                jumpscareAudio.currentTime = 0; 
                 isAlerting = false;
             } else {
                 alertInterval = setInterval(() => {
                     alert('yahaha mampus kena spam :v!');
-                }, 100); // Jeda 0.1 detik
-                toggleBtn.textContent = 'Hentikan Alert';
+                }, 100); 
+                document.body.style.backgroundColor = 'black'; 
+                toggleBtn.style.display = 'none'; 
+                jumpscareDiv.style.display = 'flex'; 
+                jumpscareAudio.play(); 
                 isAlerting = true;
             }
         }
